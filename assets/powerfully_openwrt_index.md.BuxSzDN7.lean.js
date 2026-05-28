@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as r}from"./chunks/framework.CfOCMapB.js";const f=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"powerfully/openwrt/index.md","filePath":"powerfully/openwrt/index.md"}'),o={name:"powerfully/openwrt/index.md"};function n(a,p,s,c,d,i){return r(),t("div")}const _=e(o,[["render",n]]);export{f as __pageData,_ as default};
