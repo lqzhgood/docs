@@ -12,10 +12,10 @@ hero:
     actions:
         - theme: brand
           text: 🚀 开启探索
-          link: /markdown-examples
+          link: ./special/mid-end/
         - theme: alt
           text: 📖 查阅笔记
-          link: /api-examples
+          link: ./powerfully/vscode/
 
 features:
     - title: 📚 知识体系化

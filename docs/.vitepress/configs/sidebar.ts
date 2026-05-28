@@ -41,7 +41,7 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
                     link: 'https://www.yuque.com/hlwzn/hi5s1y/yqsig3g4wdxz4t0c',
                 },
                 {
-                    text: '黑客松',
+                    text: '🎯 黑客松',
                     link: '/special/blog/hackathon/',
                 },
             ],
