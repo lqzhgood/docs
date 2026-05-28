@@ -40,6 +40,10 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
                     text: '☀️ HDR与前端应用',
                     link: 'https://www.yuque.com/hlwzn/hi5s1y/yqsig3g4wdxz4t0c',
                 },
+                {
+                    text: '黑客松',
+                    link: '/special/blog/hackathon/',
+                },
             ],
         },
         {

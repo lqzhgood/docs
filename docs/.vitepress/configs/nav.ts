@@ -24,7 +24,7 @@ export const nav: DefaultTheme.Config['nav'] = [
                 link: 'https://www.yuque.com/hlwzn/hi5s1y/rmag3ifg4bxtlnaa',
             },
             {
-                text: 'Hello Real World 培训',
+                text: '培训',
                 link: 'https://www.yuque.com/hlwzn/hi5s1y/hn2vybe0sauos7qn',
             },
             {
