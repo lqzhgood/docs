@@ -92,6 +92,10 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
                     text: 'AI发展',
                     link: '/special/ai/process/',
                 },
+                {
+                    text: 'AI订阅指南',
+                    link: '/special/ai/buy',
+                },
             ],
         },
         {
