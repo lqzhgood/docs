@@ -23,6 +23,10 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
                     text: 'B端性能优化',
                     link: '/special/mid-end/optimized/',
                 },
+                {
+                    text: '状态库对比',
+                    link: '/special/mid-end/StateVs/',
+                },
             ],
         },
         {
