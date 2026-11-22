@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DevHelper 隐私政策</title>
+<meta name="description" content="DevHelper（Chrome 扩展）隐私权政策：说明扩展处理哪些数据、数据存放在哪里、与谁共享以及如何删除。">
+<meta name="robots" content="index,follow">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --text: #1b2029;
+    --muted: #5e697b;
+    --line: #dee4ec;
+    --line-soft: #e8ecf1;
+    --blue: #2057bf;
+    --blue-soft: #eef3fc;
+    --warn-bg: #fff8e8;
+    --warn-line: #e8c67a;
+    --warn-text: #6b4a05;
+    --code-bg: #f0f3f7;
+    --accent-warm: #b3541e;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #12151a;
+      --surface: #181c23;
+      --text: #e6e9ef;
+      --muted: #a0a9ba;
+      --line: #2c333d;
+      --line-soft: #242a33;
+      --blue: #7aa7ff;
+      --blue-soft: #1b2536;
+      --warn-bg: #2a2314;
+      --warn-line: #6b5622;
+      --warn-text: #f0d79a;
+      --code-bg: #1e242c;
+      --accent-warm: #f0a878;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #12151a;
+    --surface: #181c23;
+    --text: #e6e9ef;
+    --muted: #a0a9ba;
+    --line: #2c333d;
+    --line-soft: #242a33;
+    --blue: #7aa7ff;
+    --blue-soft: #1b2536;
+    --warn-bg: #2a2314;
+    --warn-line: #6b5622;
+    --warn-text: #f0d79a;
+    --code-bg: #1e242c;
+    --accent-warm: #f0a878;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.72 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    padding: 0 16px 72px;
+  }
+  .mast {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 56px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 650;
+    font-size: 15px;
+    letter-spacing: .01em;
+  }
+  .mast .mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--text);
+    color: var(--bg);
+    font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .mast .sep { color: var(--muted); font-weight: 400; }
+  .mast .doc { color: var(--muted); font-weight: 500; font-size: 13px; }
+  main { max-width: 900px; margin: 0 auto; }
+  h1 {
+    font-size: clamp(26px, 4vw, 33px);
+    line-height: 1.28;
+    font-weight: 680;
+    letter-spacing: -.01em;
+    margin: 40px 0 10px;
+  }
+  .lead { color: var(--muted); margin: 0 0 6px; max-width: 62ch; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 18px 0 0;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .meta b { color: var(--text); font-weight: 600; }
+  .summary {
+    margin: 22px 0 0;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--blue);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .summary h2 { margin: 0 0 8px; font-size: 15px; }
+  .summary ul { margin: 0; padding-left: 20px; }
+  .summary li { margin: 5px 0; }
+  .summary li:last-child { margin-bottom: 0; }
+  nav.toc {
+    margin: 26px 0 0;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 13.5px;
+  }
+  nav.toc h2 { margin: 0 0 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  nav.toc li { margin: 3px 0; break-inside: avoid; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--blue); text-decoration: underline; }
+  section { margin-top: 40px; scroll-margin-top: 16px; }
+  h2 {
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 660;
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  h2 .num {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    margin-right: 8px;
+  }
+  h3 { font-size: 15.5px; font-weight: 640; margin: 22px 0 8px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 22px; }
+  li { margin: 4px 0; }
+  a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  code, kbd {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--code-bg);
+    font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow-wrap: anywhere;
+  }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); margin: 14px 0 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 620px; }
+  th, td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line-soft); }
+  thead th { background: var(--code-bg); color: var(--muted); font-size: 11.5px; font-weight: 650; letter-spacing: .04em; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td:first-child { font-weight: 560; white-space: nowrap; }
+  .yes { color: var(--accent-warm); font-weight: 600; }
+  .no { color: var(--muted); }
+  .callout {
+    margin: 14px 0 16px;
+    padding: 13px 16px;
+    border: 1px solid var(--warn-line);
+    border-radius: var(--radius);
+    background: var(--warn-bg);
+    color: var(--warn-text);
+    font-size: 13.5px;
+  }
+  .callout p { margin: 0 0 8px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout b { font-weight: 680; }
+  .kv { margin: 0 0 16px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+  .kv > div { display: grid; grid-template-columns: 190px 1fr; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; }
+  .kv > div:last-child { border-bottom: 0; }
+  .kv dt { color: var(--muted); margin: 0; }
+  .kv dd { margin: 0; overflow-wrap: anywhere; }
+  .contact {
+    margin: 14px 0 0;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .contact p { margin: 0 0 6px; }
+  .contact p:last-child { margin-bottom: 0; }
+  footer {
+    max-width: 900px;
+    margin: 56px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .en { font-size: 14px; }
+  .en h3 { font-size: 14.5px; }
+  @media (max-width: 640px) {
+    nav.toc ol { columns: 1; }
+    .kv > div { grid-template-columns: 1fr; gap: 2px; }
+    .meta { gap: 4px 14px; }
+  }
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    nav.toc { break-inside: avoid; }
+    section { break-inside: auto; }
+    h2 { break-after: avoid; }
+    .table-wrap, .callout, .kv, .contact { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<header class="mast">
+  <span class="mark" aria-hidden="true">&gt;_</span>
+  <span>DevHelper</span>
+  <span class="sep">·</span>
+  <span class="doc">隐私权政策</span>
+</header>
+
+<main>
+  <h1>DevHelper 隐私权政策</h1>
+  <p class="lead">
+    本政策说明 Chrome 桌面扩展「DevHelper · 开发助手」（以下简称「本扩展」）会处理哪些数据、这些数据存放在哪里、与谁共享，以及你可以如何删除它们。
+  </p>
+
+  <div class="meta">
+    <span>生效日期：<b>2026 年 11 月 22 日</b></span>
+    <span>最近更新：<b>2026 年 11 月 22 日</b></span>
+    <span>适用版本：<b>1.0.23 及之后</b></span>
+    <span>适用对象：<b>企业内部研发与测试人员</b></span>
+  </div>
+
+  <div class="summary">
+    <h2>要点摘要</h2>
+    <ul>
+      <li>本扩展是内部研发工具，用于管理 PRE、UAT、PROD 测试账号、共享业务域名环境、采集前后端请求关系，并在企业统一登录页自动完成登录。</li>
+      <li>账号与密码<b>只保存在你的浏览器本地</b>，不会上传到我们的服务器；只有在你自己点击「分享」「导出」时才会写入剪贴板。</li>
+      <li>会发送到我们自己服务器的只有：域名环境标注、前端域名与后端请求的对应关系、以及地区与全局配置的读取。上报内容<b>不包含</b>查询参数、请求体、Cookie 或认证头。</li>
+      <li>使用统计会发送到 Google Analytics，只包含随机安装 ID 和操作/接口元数据，<b>不包含</b>账号、密码、业务域名或请求路径。</li>
+      <li>我们<b>不出售</b>用户数据，不用于广告，不用于信用评估，也不用于与本扩展功能无关的目的。</li>
+    </ul>
+  </div>
+
+  <nav class="toc" aria-label="目录">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="#scope">适用范围与身份</a></li>
+      <li><a href="#single-purpose">单一用途</a></li>
+      <li><a href="#data">处理的数据类型</a></li>
+      <li><a href="#local-only">仅保存在本机的数据</a></li>
+      <li><a href="#server">发送到项目服务器的数据</a></li>
+      <li><a href="#login">登录自动化与会话清理</a></li>
+      <li><a href="#clipboard">剪贴板</a></li>
+      <li><a href="#analytics">使用统计与第三方</a></li>
+      <li><a href="#not-collected">我们不收集的数据</a></li>
+      <li><a href="#sharing">共享、出售与广告</a></li>
+      <li><a href="#limited-use">有限使用声明</a></li>
+      <li><a href="#retention">保留期与删除</a></li>
+      <li><a href="#security">安全措施与已知限制</a></li>
+      <li><a href="#permissions">权限及用途</a></li>
+      <li><a href="#children">未成年人</a></li>
+      <li><a href="#changes">政策变更</a></li>
+      <li><a href="#contact">联系方式</a></li>
+      <li><a href="#english">English Summary</a></li>
+    </ol>
+  </nav>
+
+  <section id="scope">
+    <h2><span class="num">1</span>适用范围与身份</h2>
+    <p>本扩展由企业内部的研发团队（以下称「我们」）开发并维护，仅供企业内部研发、测试及相关人员在开发与联调场景中使用。安装、使用本扩展即表示你已阅读并理解本政策。</p>
+    <p>本扩展会连接由我们运维的项目服务器（地址由部署方配置，可在扩展「高级选项」中修改），用于共享域名环境、地区登录入口、采集过滤规则和前后端请求关系。该服务器不是面向公众的消费类服务。</p>
+    <p>本政策仅适用于本扩展本身，不适用于你在浏览器中访问的第三方网站（包括企业内部各业务站点与统一登录页）或 Google Analytics。这些服务各自的数据处理规则由其运营方负责。</p>
+  </section>
+
+  <section id="single-purpose">
+    <h2><span class="num">2</span>单一用途</h2>
+    <p>本扩展的单一用途是：<b>帮助企业内部研发与测试人员在浏览器中管理测试账号、标注并共享业务域名环境、查看前后端请求关系，并在企业统一登录页完成登录或填写账号密码。</b></p>
+    <p>本扩展不会用于广告投放、内容推荐、价格比较、浏览行为画像，也不会向与本扩展功能无关的第三方提供数据。</p>
+  </section>
+
+  <section id="data">
+    <h2><span class="num">3</span>处理的数据类型</h2>
+    <p>下表按数据类型汇总处理范围。「离开本机」指数据是否会通过本扩展的网络请求发送到本扩展自身以外的位置。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th scope="col">数据类型</th><th scope="col">具体内容</th><th scope="col">离开本机</th><th scope="col">用途</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>账号凭据</td>
+            <td>邮箱或手机号、国家区号、密码、环境（PRE/UAT/PROD）、地区、备注、置顶与最近使用顺序</td>
+            <td><span class="no">否</span><br>仅在你主动分享/导出时写入剪贴板</td>
+            <td>账号列表展示、登录填充、导入导出</td>
+          </tr>
+          <tr>
+            <td>网页浏览信息</td>
+            <td>当前标签页地址与主机名、主文档的实际连接 IP</td>
+            <td><span class="yes">部分</span><br>主机名与环境标注会上报；连接 IP 仅在本机使用</td>
+            <td>识别当前页面环境、显示徽标、共享域名标注、判断是否属于本地开发环境</td>
+          </tr>
+          <tr>
+            <td>请求关系</td>
+            <td>前端主机名、HTTP 方法、后端 host（含端口）、pathname、最近使用日期</td>
+            <td><span class="yes">是</span><br>按批次上报</td>
+            <td>共享前后端接口关系，供研发查询</td>
+          </tr>
+          <tr>
+            <td>使用统计</td>
+            <td>随机安装 ID、页面打开事件、功能使用事件、接口调用元数据</td>
+            <td><span class="yes">是</span><br>发送至 Google Analytics</td>
+            <td>了解功能使用情况与接口成功率</td>
+          </tr>
+          <tr>
+            <td>剪贴板文本</td>
+            <td>打开扩展弹窗时读取的剪贴板内容；导出/分享时写入的账号 JSON</td>
+            <td><span class="no">否</span></td>
+            <td>识别账号以便快速新增或导入</td>
+          </tr>
+          <tr>
+            <td>Cookie 与 localStorage</td>
+            <td>目标业务站点与对应统一登录页的会话数据</td>
+            <td><span class="no">否</span><br>仅在本机读取匹配并删除</td>
+            <td>切换账号前清理旧登录会话</td>
+          </tr>
+          <tr>
+            <td>配置数据</td>
+            <td>地区登录入口、域名环境标注、采集过滤规则、刷新周期</td>
+            <td><span class="yes">是</span><br>读取；修改由管理员或高级选项提交</td>
+            <td>保持多端配置一致</td>
+          </tr>
+          <tr>
+            <td>登录表单填写</td>
+            <td>所选账号的邮箱/手机号与密码</td>
+            <td><span class="no">否</span><br>填写后提交给登录页自身</td>
+            <td>PRE/UAT 自动登录，PROD 仅填充不提交</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>本扩展不建立跨站点的用户画像，不做浏览器指纹采集（不使用 Canvas、WebGL、字体枚举等指纹技术），也不收集或上传网页正文。登录自动化会在统一登录页本地读取表单结构、按钮文案等页面元素，仅用于判断页面版本和完成填写，这些内容不会离开本机。</p>
+
+    <h3>3.1 对应 Chrome 应用商店的披露类别</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">商店类别</th><th scope="col">本扩展是否涉及</th><th scope="col">说明</th></tr></thead>
+        <tbody>
+          <tr><td>身份验证信息</td><td><span class="yes">涉及（仅本地）</span></td><td>测试账号与密码保存在本机，不上传；仅在你主动分享/导出时写入剪贴板。</td></tr>
+          <tr><td>网页浏览活动</td><td><span class="yes">涉及</span></td><td>当前页面的主机名、环境标注与请求关系；不上传完整 URL 的查询参数。</td></tr>
+          <tr><td>网站内容</td><td><span class="no">仅本地读取</span></td><td>登录自动化会读取统一登录页的表单与按钮结构，用于识别版本和填写；不收集、不上传页面正文或媒体。</td></tr>
+          <tr><td>用户活动</td><td><span class="yes">涉及</span></td><td>匿名功能使用与接口调用统计，不含账号与业务数据。</td></tr>
+          <tr><td>个人身份信息</td><td><span class="no">不涉及</span></td><td>不收集姓名、邮箱地址（账号登录名除外，且仅本地）、证件号等。</td></tr>
+          <tr><td>财务与支付信息</td><td><span class="no">不涉及</span></td><td>不收集银行卡、交易或信用信息。</td></tr>
+          <tr><td>健康信息</td><td><span class="no">不涉及</span></td><td>—</td></tr>
+          <tr><td>位置</td><td><span class="no">不涉及</span></td><td>不使用定位服务；连接 IP 仅在本机用于判断是否为本地开发环境。</td></tr>
+          <tr><td>个人通讯</td><td><span class="no">不涉及</span></td><td>不读取邮件、聊天或短信内容。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>上述披露与扩展「隐私」页的实际声明一致；如两者出现不一致，以本政策为准并及时修正商店声明。</p>
+  </section>
+
+  <section id="local-only">
+    <h2><span class="num">4</span>仅保存在本机的数据</h2>
+    <h3>4.1 账号与密码</h3>
+    <p>账号记录保存在 <code>chrome.storage.local</code>，包括登录名、密码、环境、地区、备注和排序信息。<b>账号数据不会上传到我们的服务器，也不会发送给 Google Analytics。</b></p>
+    <p>「分享」「导出全部」会把账号 JSON（<b>含明文密码</b>）写入系统剪贴板；账号行上的「复制账号」「复制密码」同样会写入对应字段。写入由你主动触发，之后的内容由你自行选择粘贴到何处。请勿将这类内容粘贴到聊天工具、工单系统或其他非受控渠道。</p>
+    <h3>4.2 连接 IP 与临时标注</h3>
+    <p>扩展会从主文档响应中取得当前页面的实际连接 IP，并结合内置回环规则和远端过滤规则判断页面是否属于本地开发环境。连接 IP 只用于本机判断，<b>不会随请求关系上报</b>。</p>
+    <p>「临时」环境标注只在本机生效，24 小时后自动恢复，期间不会上报，也不会采集该域名下的请求关系。</p>
+    <h3>4.3 请求记录与缓存</h3>
+    <p>请求关系先在本地去重保存，记录是否已上传与最近使用日期；同步失败时保留本地副本并重试。地区、域名、过滤规则和全局配置的最近一次有效副本同样缓存在本地。</p>
+    <h3>4.4 本地存储的保护与局限</h3>
+    <p>本扩展把本地存储的访问级别限制为受信任上下文，网页内容脚本无法读取扩展存储。但浏览器扩展存储本身不做加密：能够访问该 Chrome 用户配置文件的其他程序或用户，理论上可以读取账号与密码。请为操作系统账户设置密码，不要在共用设备上保存生产环境凭据。</p>
+  </section>
+
+  <section id="server">
+    <h2><span class="num">5</span>发送到项目服务器的数据</h2>
+    <p>扩展只调用下列接口，完整前缀为「服务器地址 + <code>/api/chrome-ext-devhelper</code>」：</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">接口</th><th scope="col">方向</th><th scope="col">内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET /config</code></td><td>读取</td><td>刷新周期、本地请求记录上限、统计配置</td></tr>
+          <tr><td><code>GET /regions</code>、<code>PATCH /regions</code></td><td>读取 / 提交</td><td>各地区 PRE/UAT/PROD 登录入口与版本；修改由管理员在后台审核</td></tr>
+          <tr><td><code>GET /domains</code>、<code>POST /domains</code></td><td>读取 / 上报</td><td>前端主机名、环境（pre/uat/prod）、更新时间戳</td></tr>
+          <tr><td><code>GET /domain-blacklist</code></td><td>读取</td><td>采集过滤规则（不含管理员说明）</td></tr>
+          <tr><td><code>POST /requests/batch</code></td><td>上报</td><td>每批最多 50 条请求关系</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5.1 请求关系的内容</h3>
+    <p>每条关系由「前端主机名 + 请求方法 + 后端 host（含端口）+ pathname」唯一确定，另附最近使用日期。<b>不包含</b>查询参数、请求体、响应体、Cookie、认证头、页面内容，也不包含环境标签与连接 IP。</p>
+    <p>采集只发生在：顶层页面（不含 iframe）、页面已被明确标注环境、未被标注为临时、且不属于本地/过滤规则的 HTTP 或 HTTPS 的 fetch/XHR 请求。OPTIONS 请求一律不保存、不上报。</p>
+    <h3>5.2 鉴权与传输</h3>
+    <p>业务接口请求使用扩展内置的共享项目 API Key（<code>Authorization: Bearer …</code>）。该 Key 可被扩展使用者提取，<b>属于项目共享凭据，不能用于识别个人</b>。请求不携带浏览器 Cookie，不跟随重定向。</p>
+    <p>请求头还会携带两个标识：<code>X-DevHelper-Client-Id</code>（随机安装 ID，用于关联同一安装的统计事件）与 <code>X-DevHelper-Request-Id</code>（每次请求独立的随机 ID，用于排查）。这两个值均不包含账号或设备信息。</p>
+    <div class="callout">
+      <p><b>传输加密：</b>若部署时项目服务器地址使用 <code>http://</code>，请求内容在传输过程中<b>未加密</b>。请通过扩展「高级选项」或部署配置改用 HTTPS，并为自建服务启用 TLS。</p>
+    </div>
+    <h3>5.3 服务器上的数据</h3>
+    <p>服务器按唯一键合并不同成员上报的相同关系，并记录最后一次收到该关系的服务器时间。域名标注以服务器版本为准，过期修改会被拒绝而不是覆盖他人修改。</p>
+    <p>与所有 Web 服务一样，服务器会在处理请求时获得请求来源 IP、时间与 User-Agent，并写入项目日志供管理员排查故障。日志仅用于运维与安全审计，不与账号关联，也不会出售或用于营销；日志按服务器的运维策略定期清理。</p>
+  </section>
+
+  <section id="login">
+    <h2><span class="num">6</span>登录自动化与会话清理</h2>
+    <p>在你于扩展中选择账号并发起登录后，扩展会在当前标签页执行以下本地操作：</p>
+    <ul>
+      <li><b>清理旧会话：</b>读取当前标签页所属 Cookie 存储中的 Cookie，筛选出对「原业务站点」或「目标统一登录页」生效的条目并删除，同时清除这两个源的 localStorage。Cookie 只在本机匹配与删除，<b>不会被保存或上传</b>。</li>
+      <li><b>页面识别：</b>在统一登录页中读取登录页版本与表单结构，确认页面与地区配置一致后才交付账号。</li>
+      <li><b>填写与提交：</b>PRE/UAT 会自动填写账号密码并提交；PROD 只填写账号密码后停止，最终登录与验证由你手动完成。凭据提交给统一登录页自身，不经过我们的服务器。</li>
+      <li><b>验证步骤：</b>PRE/UAT 下扩展会按页面出现的步骤处理滑块/拼图、可信设备确认和验证码。验证码发送与滑块校验的诊断信息只显示在页面进度面板中，<b>不写入持久存储，也不上报</b>（仅保留百分比、耗时和业务错误码）。</li>
+    </ul>
+    <p>这些自动化只在企业统一登录页（由地区配置限定为受信任的登录域名）和扩展自身的过渡页中运行，不会注入其他网站。</p>
+  </section>
+
+  <section id="clipboard">
+    <h2><span class="num">7</span>剪贴板</h2>
+    <p>打开扩展弹窗或侧栏时，扩展会读取一次剪贴板文本，用于识别「单组账号密码」「多组账号」或「DevHelper 导出的账号 JSON」，并提示你是否新增或导入。<b>识别到你确认之前不会保存任何内容</b>；读取失败或无法识别时不做处理。</p>
+    <p>只有在你主动点击「分享」「复制账号」「复制密码」或「导出全部」时，扩展才会写入剪贴板。这些写入操作可能包含明文密码。剪贴板内容由你控制，不属于我们收集的数据。</p>
+  </section>
+
+  <section id="analytics">
+    <h2><span class="num">8</span>使用统计与第三方</h2>
+    <h3>8.1 统计方式</h3>
+    <p>当管理员在项目服务器配置了有效的 GA4 测量 ID 与上报密钥时，扩展会向 Google Analytics Measurement Protocol（<code>https://www.google-analytics.com/mp/collect</code>）发送以下事件：</p>
+    <ul>
+      <li><code>page_view</code>：弹窗、侧栏或设置页被打开，页面地址使用固定虚拟地址（如 <code>https://devhelper.extension/popup</code>）。</li>
+      <li><code>feature_used</code>：开始登录、标注域名、合并/删除账号、置顶、保存/删除地区、切换服务器等操作，只包含动作名与成功/失败。</li>
+      <li><code>api_request</code>：调用本项目接口的接口名、方法、HTTP 状态码、耗时、结果类型与请求 ID。</li>
+    </ul>
+    <p>事件使用随机生成的安装 ID（<code>chrome.storage.local</code> 中的 UUID）作为 <code>client_id</code>，不关联你的账号、姓名、邮箱或设备标识。事件参数经白名单过滤，<b>不会发送</b>业务域名、请求路径、账号、密码或页面内容。</p>
+    <p>未配置有效的测量 ID 与密钥时，扩展不会发送任何统计事件。</p>
+    <h3>8.2 第三方</h3>
+    <p>统计事件由 Google LLC（Google Analytics）处理，可能传输至美国等地区。Google Analytics 的数据保留期由该 GA4 属性的设置决定（通常为 2 个月或 14 个月）。相关处理适用 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google 隐私权政策</a>与<a href="https://marketingplatform.google.com/about/analytics/terms/us/" target="_blank" rel="noopener noreferrer">Google Analytics 服务条款</a>。</p>
+    <p>项目服务器也会独立向同一 GA4 属性上报其自身收到的接口请求，用于对比客户端与服务端的调用情况；该服务端上报不含客户端安装 ID 之外的个人信息，也不转发客户端事件。</p>
+    <h3>8.3 被动收集</h3>
+    <p>除上述统计外，扩展不对你的浏览行为做任何分析。</p>
+  </section>
+
+  <section id="not-collected">
+    <h2><span class="num">9</span>我们不收集的数据</h2>
+    <ul>
+      <li>不收集姓名、身份证件、地址、支付信息或财务信息。</li>
+      <li>不收集账号密码（账号只保存在本地）。</li>
+      <li>不上传查询参数、请求体、响应体、Cookie、Authorization 头或网页正文。</li>
+      <li>不收集精确地理位置；不使用摄像头、麦克风或屏幕录制。</li>
+      <li>不采集浏览器指纹，不读取系统字体列表或硬件标识。</li>
+      <li>不读取浏览历史数据库；仅通过标签页 API 读取已打开标签页的地址，用于在工具栏图标上显示环境徽标与识别登录目标页。</li>
+    </ul>
+  </section>
+
+  <section id="sharing">
+    <h2><span class="num">10</span>共享、出售与广告</h2>
+    <ul>
+      <li><b>不出售</b>用户数据，也不将数据用于定向广告、再营销或跨站追踪。</li>
+      <li>除下列情形外，不向第三方披露用户数据：
+        <ul>
+          <li>向 Google Analytics 发送第 8 节所述的匿名统计事件；</li>
+          <li>向项目服务器（由我们运维）发送域名标注与请求关系，供内部研发共享；</li>
+          <li>依据法律法规、司法或监管要求必须提供。</li>
+        </ul>
+      </li>
+      <li>共享的域名标注与请求关系不包含个人身份信息，但可能间接反映团队正在开发的业务系统。服务器访问受项目管理员控制。</li>
+      <li>不使用用户数据判断信用状况，也不用于借贷、保险或就业等用途。</li>
+    </ul>
+  </section>
+
+  <section id="limited-use">
+    <h2><span class="num">11</span>有限使用声明</h2>
+    <p>本扩展对用户数据的处理遵循 Chrome Web Store 用户数据政策中的 Limited Use（有限使用）要求：</p>
+    <ul>
+      <li>仅将用户数据用于本政策第 2、3 节明确说明的功能；</li>
+      <li>不出售用户数据，也不为其他目的转让给第三方；</li>
+      <li>不将用户数据用于或转让给广告平台、数据经纪商或信息转售方；</li>
+      <li>不使用或转让用户数据来判断信用度，或用于借贷目的；</li>
+      <li>除为提供或改进本扩展的单一用途所必需外，不向任何人阅读或传输用户数据——本扩展本身不包含人工读取用户数据的功能；</li>
+      <li>仅在实现上述用途所必需的最小范围内处理数据，并在不需要时删除或匿名化。</li>
+    </ul>
+  </section>
+
+  <section id="retention">
+    <h2><span class="num">12</span>保留期与删除</h2>
+    <h3>12.1 本机数据</h3>
+    <ul>
+      <li><b>账号：</b>在扩展中通过账号行的「⋯ → 删除」删除，立即从本地存储移除。</li>
+      <li><b>请求记录与域名缓存：</b>「设置 → 高级选项 → 清空本地数据」清除本地请求记录、域名标注缓存、临时标注与未同步标注，然后从服务器重新读取。</li>
+      <li><b>本地容量：</b>请求记录默认上限为 5000 条（可在服务器配置为 1 至 1,000,000），达到上限时优先删除已上传且最久未使用的条目。</li>
+      <li><b>卸载扩展：</b>在 <code>chrome://extensions</code> 中卸载将删除该扩展的全部本地存储，包括账号。</li>
+    </ul>
+    <h3>12.2 服务器数据</h3>
+    <p>服务器保留去重后的域名标注与请求关系，用于团队内查询。如需删除特定主机名或时间范围的数据，请通过第 17 节的方式联系我们，并说明主机名与大致时间范围；我们会在核实后尽快处理。</p>
+    <h3>12.3 统计数据</h3>
+    <p>统计事件按 GA4 属性设置的保留期由 Google 处理。由于统计使用随机安装 ID 且不关联身份，我们通常无法定位特定个人的统计记录；卸载扩展即可停止后续上报。</p>
+  </section>
+
+  <section id="security">
+    <h2><span class="num">13</span>安全措施与已知限制</h2>
+    <p>我们采取的措施：</p>
+    <ul>
+      <li>扩展页面与后台之间校验消息来源，只接受来自扩展自身页面与已注册内容脚本的请求；</li>
+      <li>本地存储访问级别限制为受信任上下文，网页脚本无法读取；</li>
+      <li>业务接口请求不携带浏览器 Cookie，禁止跟随重定向，设置请求超时；</li>
+      <li>账号记录带版本标识，写入前校验格式与来源，避免并发覆盖；</li>
+      <li>地区登录入口只接受受信任的登录域名（HTTPS）；</li>
+      <li>不加载任何远程代码或远程样式：Inter 字体与全部脚本随安装包分发，不使用 CDN，不动态执行远端脚本。</li>
+    </ul>
+    <p>需要你了解的限制：</p>
+    <ul>
+      <li>本地存储未加密，能访问该 Chrome 用户配置文件的人或程序可以读取账号密码；</li>
+      <li>内置项目 API Key 可被提取，属于项目共享凭据，不能识别或隔离个人；</li>
+      <li>若部署使用 HTTP 地址，传输内容可能被同一网络中的他人观察，建议改用 HTTPS。</li>
+    </ul>
+  </section>
+
+  <section id="permissions">
+    <h2><span class="num">14</span>权限及用途</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">权限</th><th scope="col">用途</th></tr></thead>
+        <tbody>
+          <tr><td><code>host_permissions</code>（所有 HTTP/HTTPS 站点）</td><td>识别已标注环境的业务站点、清理登录会话、在统一登录页运行登录自动化；无需为每个开发站点单独授权。</td></tr>
+          <tr><td><code>webRequest</code></td><td>观察顶层页面的请求与连接，获取主文档实际连接 IP，并采集已标注页面发起的 fetch/XHR 请求关系。</td></tr>
+          <tr><td><code>webNavigation</code></td><td>在页面提交时关联当前文档，判断环境与连接信息是否仍然有效。</td></tr>
+          <tr><td><code>tabs</code>、<code>activeTab</code></td><td>读取当前标签页地址、切换标签页、在指定标签页发起登录与更新图标徽标。</td></tr>
+          <tr><td><code>scripting</code></td><td>在统一登录页注册登录自动化脚本，并识别页面版本与表单结构。</td></tr>
+          <tr><td><code>cookies</code></td><td>切换账号前删除目标业务站点与统一登录页的旧会话 Cookie。</td></tr>
+          <tr><td><code>browsingData</code></td><td>只清除目标站点的 localStorage，用于重置登录状态。</td></tr>
+          <tr><td><code>clipboardRead</code></td><td>打开扩展时读取剪贴板，识别可导入的账号。</td></tr>
+          <tr><td><code>clipboardWrite</code></td><td>分享、复制账号密码与导出全部账号。</td></tr>
+          <tr><td><code>storage</code>、<code>unlimitedStorage</code></td><td>保存账号、配置缓存与请求关系；避免固定容量配额影响去重记录。</td></tr>
+          <tr><td><code>alarms</code></td><td>按服务器配置的周期刷新配置与上报请求关系，处理登录超时。</td></tr>
+          <tr><td><code>sidePanel</code></td><td>在弹窗与侧边栏之间切换。</td></tr>
+          <tr><td><code>incognito: split</code></td><td>在无痕窗口中独立运行（需用户手动允许）；无痕窗口不生成安装 ID、不发送统计，也不负责同步。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="children">
+    <h2><span class="num">15</span>未成年人</h2>
+    <p>本扩展面向具备相应授权的内部研发与测试人员，不面向未成年人，也不会有意收集未成年人的个人信息。</p>
+  </section>
+
+  <section id="changes">
+    <h2><span class="num">16</span>政策变更</h2>
+    <p>当扩展的数据处理方式发生变化（例如新增数据类别、新增第三方接收方或调整上报字段）时，我们会更新本页面并修改顶部的「最近更新」日期。重大变更会在扩展的版本说明中提示。若你不同意变更后的政策，请卸载扩展并联系我们删除相关数据。</p>
+  </section>
+
+  <section id="contact">
+    <h2><span class="num">17</span>联系方式</h2>
+    <div class="contact">
+      <p><b>数据控制方：</b>DevHelper 扩展开发与维护团队</p>
+      <p><b>电子邮件：</b><a href="mailto:i@lqzh.me">i@lqzh.me</a></p>
+      <p>咨询、数据删除请求或安全问题反馈，请通过上述邮箱联系我们，并说明扩展版本、涉及的主机名与时间范围。</p>
+    </div>
+  </section>
+
+  <section id="english" class="en">
+    <h2><span class="num">18</span>English Summary</h2>
+    <p><b>DevHelper</b> is an internal Chrome extension for enterprise developers and testers. It manages test accounts for the PRE/UAT/PROD environments, shares per-host environment labels, records front-end to back-end request relationships, and automates sign-in on the enterprise single sign-on login pages.</p>
+    <ul>
+      <li><b>Stored only on your device:</b> account logins, passwords, environments, regions and notes; connection IPs; temporary environment labels; request records pending upload. Account data is never uploaded. Sharing or exporting copies a JSON document that contains plaintext passwords to your clipboard, initiated only by you.</li>
+      <li><b>Sent to our project server</b> (address configured at deployment, configurable in the extension): domain environment labels (hostname, environment, timestamp) and request relationships (front-end hostname, HTTP method, back-end host and port, pathname, last-seen date). Query strings, request or response bodies, cookies, authorization headers and page content are never collected or uploaded.</li>
+      <li><b>Analytics:</b> when configured, anonymous events (random installation UUID, page views, feature usage, API metadata) are sent to Google Analytics. No accounts, passwords, business hostnames or request paths are included. Incognito windows send nothing.</li>
+      <li><b>Cookies and localStorage:</b> read and deleted locally only, for the target business site and the login origin, to reset login sessions. They are never transmitted.</li>
+      <li><b>No sale, no advertising, no creditworthiness use,</b> and no processing outside the extension's stated purpose, consistent with the Chrome Web Store User Data Policy (Limited Use).</li>
+      <li><b>Deletion:</b> delete accounts in the extension, use "Clear local data" for request records and domain caches, or uninstall the extension to remove all local data. Server-side data deletion can be requested by email.</li>
+      <li><b>Contact:</b> <a href="mailto:i@lqzh.me">i@lqzh.me</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>DevHelper 隐私权政策 · 生效日期 2026-11-22 · 适用于 DevHelper 1.0.23 及之后版本。</p>
+</footer>
+</body>
+</html>
